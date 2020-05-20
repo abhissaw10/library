@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment                                          # 1
+metadata:
+  name: library
+spec:
+  selector:                                               # 2
+    matchLabels:
+      app: library  
+  replicas: 2                                             # 3
+  minReadySeconds: 15
+  strategy:
+    type: RollingUpdate                                   # 4
+    rollingUpdate: 
+      maxUnavailable: 1                                   # 5
+      maxSurge: 1                                         # 6
+  template:                                               # 7
+    metadata:
+      labels:
+        app: library                                  # 8
+    spec:
+      containers:
+        - image: abhissaw/library
+          imagePullPolicy: Always                         # 9
+          name: library
+          ports:
+            - containerPort: 8080
